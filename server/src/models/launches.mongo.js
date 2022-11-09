@@ -26,6 +26,10 @@ const launchesSchema = new mongoose.Schema({
         required:true,
         default:true,
     },
+    mission: {
+        type: String,
+        required: true
+    }
 });
 
 module.exports = mongoose.model('Launch',launchesSchema);

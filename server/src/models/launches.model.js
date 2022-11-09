@@ -6,18 +6,19 @@ const planets = require('./planets.mongo')
 const launches = new Map()
 const DEFAULT_FLIGHT_NUMBER = 100;
 
-const launch = {
-    flightNumber: 100,//flight_number
-    mission: 'Kepler Exploration X',//name
-    rocket: 'Explorer IS1',//rocket.name
-    launcDate: new Date("March 27,2030"),//date_local
-    target: 'Kepler-442 b',
-    customers: ['ZTM', 'NASA'],
-    upcoming: true,
-    success: true,
-};
+//No need of them since getting real life data from SpaceX
+    // const launch = {
+    //     flightNumber: 100,//flight_number
+    //     mission: 'Kepler Exploration X',//name
+    //     rocket: 'Explorer IS1',//rocket.name
+    //     launcDate: new Date("March 27,2030"),//date_local
+    //     target: 'Kepler-442 b',
+    //     customers: ['ZTM', 'NASA'],
+    //     upcoming: true,
+    //     success: true,
+    // };
 
-saveLaunch(launch)
+    // saveLaunch(launch)
 
 const SPACEX_API_URL = 'https://api.spacexdata.com/v4/launches/query';
 
@@ -56,7 +57,7 @@ async function populateLaunches() {
         const customers = payloads.flatMap((payload) => {
             return payload['customers'];
         });
-        // console.log(customers);
+        console.log(customers);
 
         const launch = {
             flightNumber: launchDoc['flight_number'],
@@ -118,18 +119,19 @@ async function getAllLaunches(skip, limit) {
         .find({}, {
             '_id': 0,
             '__v': 0
-        }).skip(skip)
+        })
+        .sort({flightNumber:1})
+        .skip(skip)
         .limit(limit);
 }
 
 async function saveLaunch(launch) {
     await launchesDatabase.findOneAndUpdate({
         flightNumber: launch.flightNumber,
-
     }, launch, {
         upsert: true,
     })
-    // console.log(launch)
+    console.log(launch)
     // const r = await findLaunch({
     //     flightNumber:launch.flightNumber
     // })
